@@ -1,5 +1,4 @@
-import os.path
-import os
+
 import pandas as pd
 import torch
 import torch.nn as nn
@@ -9,15 +8,11 @@ from tqdm import tqdm
 from datetime import datetime
 
 class CsvDataset(Dataset):
-    def __init__(self, dataset_path):
+    def __init__(self):
         super(CsvDataset, self).__init__()
 
-        self.dataset_path = dataset_path
-        self.feature_path = os.path.join(self.dataset_path, 'data_trans.csv')
-        self.label_path = os.path.join(self.dataset_path, 'data_label_10.csv')
-
-        assert os.path.exists(self.feature_path), 'data_trans not exist'
-        assert os.path.exists(self.label_path), 'data_label not exist'
+        self.feature_path = 'data_trans.csv'
+        self.label_path = 'data_label_10.csv'
 
         feature_df_ = pd.read_csv(self.feature_path)
         label_df_ = pd.read_csv(self.label_path)
@@ -36,7 +31,7 @@ class CsvDataset(Dataset):
     def __getitem__(self, index):
         x = self.feature[index]
         x = torch.Tensor(x)
-        x = x.reshape(12, 12)                    #*********************************
+        x = x.reshape(12, 12)
 
         y = self.label[index]
 
@@ -46,8 +41,7 @@ class CsvDataset(Dataset):
         return self.length
 
 
-dataset_path = './DataSample'
-train_dataset = CsvDataset(dataset_path=dataset_path)
+train_dataset = CsvDataset()
 
 train_loader = DataLoader(dataset=train_dataset,
                           batch_size=10,                       #******************************
